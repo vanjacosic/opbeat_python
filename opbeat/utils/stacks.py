@@ -169,7 +169,7 @@ def get_stack_info(frames):
     dictionary objects that are JSON-ready.
 
     We have to be careful here as certain implementations of the
-    _Frame class do not contain the nescesary data to lookup all
+    _Frame class do not contain the necessary data to lookup all
     of the information we want.
     """
     results = []

@@ -1,17 +1,14 @@
 # -*- coding: utf-8 -*-
 
-import inspect
+import time
+
 import mock
 import opbeat
-import time
-import string
 from opbeat.utils import six
-from socket import socket, AF_INET, SOCK_DGRAM
 from opbeat.utils.compat import TestCase
 from opbeat.base import Client, ClientState
-from opbeat.utils.stacks import iter_stack_frames
-
 from tests.helpers import get_tempstoreclient
+
 
 class ClientStateTest(TestCase):
     def test_should_try_online(self):
@@ -101,29 +98,6 @@ class ClientTest(TestCase):
             },
         )
 
-    # @mock.patch('opbeat.base.Client.send_remote')
-    # @mock.patch('opbeat.base.time.time')
-    # def test_send_with_public_key(self, time, send_remote):
-    #     time.return_value = 1328055286.51
-    #     client = Client(
-    #         servers=['http://example.com'],
-    #         public_key='public',
-    #         secret_key='secret',
-    #         project=1,
-    #     )
-    #     client.send(public_key='foo', **{
-    #         'foo': 'bar',
-    #     })
-    #     send_remote.assert_called_once_with(
-    #         url='http://example.com',
-    #         data='eJyrVkrLz1eyUlBKSixSqgUAIJgEVA==',
-    #         headers={
-    #             'Content-Type': 'application/octet-stream',
-    #             'X-Sentry-Auth': 'Sentry sentry_timestamp=1328055286.51, '
-    #             'sentry_client=opbeat-python/%s, sentry_version=2.0, sentry_key=foo' % (opbeat.VERSION,)
-    #         },
-    #     )
-
     @mock.patch('opbeat.base.Client.send_remote')
     @mock.patch('opbeat.base.time.time')
     def test_send_with_auth_header(self, time, send_remote):
@@ -153,30 +127,6 @@ class ClientTest(TestCase):
         encoded = self.client.encode(data)
         self.assertTrue(type(encoded), str)
         self.assertEquals(data, self.client.decode(encoded))
-
-    # def test_dsn(self):
-    #     client = Client(dsn='http://public:secret@example.com/1')
-    #     self.assertEquals(client.servers, ['http://example.com/api/store/'])
-    #     self.assertEquals(client.project, '1')
-    #     self.assertEquals(client.public_key, 'public')
-    #     self.assertEquals(client.secret_key, 'secret')
-
-    # def test_dsn_as_first_arg(self):
-    #     client = Client('http://public:secret@example.com/1')
-    #     self.assertEquals(client.servers, ['http://example.com/api/store/'])
-    #     self.assertEquals(client.project, '1')
-    #     self.assertEquals(client.public_key, 'public')
-    #     self.assertEquals(client.secret_key, 'secret')
-
-    # def test_slug_in_dsn(self):
-    #     client = Client('http://public:secret@example.com/slug-name')
-    #     self.assertEquals(client.servers, ['http://example.com/api/store/'])
-    #     self.assertEquals(client.project, 'slug-name')
-    #     self.assertEquals(client.public_key, 'public')
-    #     self.assertEquals(client.secret_key, 'secret')
-
-    # def test_invalid_servers_with_dsn(self):
-    #     self.assertRaises(ValueError, Client, 'foo', dsn='http://public:secret@example.com/1')
 
     def test_explicit_message_on_message_event(self):
         self.client.capture('Message', message='test', data={

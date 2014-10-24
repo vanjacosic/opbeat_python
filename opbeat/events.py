@@ -11,6 +11,7 @@ Large portions are
 
 import logging
 import sys
+from traceback import format_exception
 
 from opbeat.utils import varmap
 from opbeat.utils.encoding import shorten, to_unicode

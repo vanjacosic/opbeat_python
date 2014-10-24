@@ -247,6 +247,10 @@ class Client(object):
                 self.include_paths, self.exclude_paths
             )
 
+        # Stackframes need to be deepest last
+        if 'stacktrace' in data:
+            data['stacktrace']['frames'].reverse()
+
         if not data.get('level'):
             data['level'] = 'error'
 
