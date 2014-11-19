@@ -5,6 +5,7 @@ import uuid
 from opbeat.utils.compat import TestCase
 
 from opbeat.utils import opbeat_json as json
+from opbeat.utils import six
 
 
 class JSONTest(TestCase):
@@ -23,3 +24,10 @@ class JSONTest(TestCase):
     def test_frozenset(self):
         res = frozenset(['foo', 'bar'])
         self.assertIn(json.dumps(res), ('["foo", "bar"]', '["bar", "foo"]'))
+
+    def test_bytes(self):
+        if six.PY2:
+            res = bytes('foobar')
+        else:
+            res = bytes('foobar', encoding='ascii')
+        self.assertEqual(json.dumps(res), '"foobar"')
