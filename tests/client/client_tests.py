@@ -180,48 +180,6 @@ class ClientTest(TestCase):
         self.assertFalse('stacktrace' in event)
         self.assertTrue('timestamp' in event)
 
-    # def test_stack_explicit_frames(self):
-    #     def bar():
-    #         return inspect.stack()
-
-    #     frames = bar()
-
-    #     self.client.capture('test', stack=iter_stack_frames(frames))
-
-    #     self.assertEquals(len(self.client.events), 1)
-    #     event = self.client.events.pop(0)
-    #     self.assertEquals(event['message'], 'test')
-    #     self.assertTrue('stacktrace' in event)
-    #     self.assertEquals(len(frames), len(event['stacktrace']['frames']))
-    #     for frame, frame_i in zip(frames, event['stacktrace']['frames']):
-    #         self.assertEquals(frame[0].f_code.co_filename, frame_i['abs_path'])
-    #         self.assertEquals(frame[0].f_code.co_name, frame_i['function'])
-
-    # def test_stack_auto_frames(self):
-    #     self.client.create_from_text('test', stack=True)
-
-    #     self.assertEquals(len(self.client.events), 1)
-    #     event = self.client.events.pop(0)
-    #     self.assertEquals(event['message'], 'test')
-    #     self.assertTrue('stacktrace' in event)
-    #     self.assertTrue('timestamp' in event)
-
-    # def test_site(self):
-    #     self.client.capture('Message', message='test', data={'site': 'test'})
-
-    #     self.assertEquals(len(self.client.events), 1)
-    #     event = self.client.events.pop(0)
-    #     self.assertEquals(event['site'], 'test')
-    #     self.assertTrue('timestamp' in event)
-
-    # def test_implicit_site(self):
-    #     self.client = TempStoreClient(site='foo')
-    #     self.client.capture('Message', message='test')
-
-    #     self.assertEquals(len(self.client.events), 1)
-    #     event = self.client.events.pop(0)
-    #     self.assertEquals(event['site'], 'foo')
-
     def test_logger(self):
         self.client.capture('Message', message='test', data={'logger': 'test'})
 
@@ -256,29 +214,3 @@ class ClientTest(TestCase):
         self.assertEquals(len(self.client.events), 1)
         event = self.client.events.pop(0)
         self.assertTrue(len(event['logger']) < 61, len(event['logger']))
-
-    # def test_long_server_name(self):
-    #     message = 's' * 201
-
-    #     self.client.capture('Message', message=message,)
-
-    #     self.assertEquals(len(self.client.events), 1)
-    #     event = self.client.events.pop(0)
-    #     self.assertTrue(len(event['server_name']) < 201)
-
-# class ClientUDPTest(TestCase):
-#     def setUp(self):
-#         self.server_socket = socket(AF_INET, SOCK_DGRAM)
-#         self.server_socket.bind(('127.0.0.1', 0))
-#         self.client = Client(servers=["udp://%s:%s" % self.server_socket.getsockname()], key='BassOmatic')
-
-#     def test_delivery(self):
-#         self.client.create_from_text('test')
-#         data, address = self.server_socket.recvfrom(2**16)
-#         self.assertTrue("\n\n" in data)
-#         header, payload = data.split("\n\n")
-#         for substring in ("sentry_timestamp=", "sentry_client="):
-#             self.assertTrue(substring in header)
-
-#     def tearDown(self):
-#         self.server_socket.close()
