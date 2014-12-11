@@ -177,7 +177,6 @@ def get_stack_info(frames):
     of the information we want.
     """
     results = []
-    # print list(frames)[0]
     for frame, lineno in frames:
         # Support hidden frames
         f_locals = getattr(frame, 'f_locals', {})

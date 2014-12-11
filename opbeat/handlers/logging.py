@@ -82,7 +82,7 @@ class OpbeatHandler(logging.Handler, object):
             frames = []
             started = False
             last_mod = ''
-            for item in stack:
+            for item in reversed(list(stack)):
                 if isinstance(item, (list, tuple)):
                     frame, lineno = item
                 else:
