@@ -84,7 +84,6 @@ class LoggingIntegrationTest(TestCase):
         self.assertEquals(len(self.client.events), 1)
         event = self.client.events.pop(0)
         # self.assertEquals(event['message'], 'This is a test of args')
-        # print event.keys()
         self.assertFalse('stacktrace' in event)
         self.assertFalse('exception' in event)
         self.assertTrue('param_message' in event)
@@ -99,7 +98,7 @@ class LoggingIntegrationTest(TestCase):
         self.assertTrue('stacktrace' in event)
         frames = event['stacktrace']['frames']
         self.assertNotEquals(len(frames), 1)
-        frame = frames[0]
+        frame = frames[-1]
         self.assertEquals(frame['module'], __name__)
         self.assertFalse('exception' in event)
         self.assertTrue('param_message' in event)
@@ -136,6 +135,10 @@ class LoggingIntegrationTest(TestCase):
         self.assertEquals(msg['message'], 'This is a test of stacks')
         self.assertEquals(msg['params'], ())
         self.assertTrue('stacktrace' in event)
+        frames = event['stacktrace']['frames']
+        self.assertNotEquals(len(frames), 1)
+        frame = frames[-1]
+        self.assertEquals(frame['module'], __name__)
 
     def test_extra_culprit(self):
         self.logger.info('This is a test of stacks', extra={'culprit': 'foo.bar'})

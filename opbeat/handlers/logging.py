@@ -104,7 +104,7 @@ class OpbeatHandler(logging.Handler, object):
                         last_mod = module_name
                         continue
                 frames.append((frame, lineno))
-            stack = frames
+            stack = reversed(frames)
 
         extra = getattr(record, 'data', {})
         # Add in all of the data from the record that

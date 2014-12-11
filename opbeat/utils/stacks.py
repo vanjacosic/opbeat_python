@@ -155,10 +155,7 @@ def iter_stack_frames(frames=None):
     local variable.
     """
     if not frames:
-        frames = inspect.stack()[1:]
-
-    # Opbeat expects deepest last order
-    frames = reversed(frames)
+        frames = reversed(inspect.stack()[1:])
 
     for frame, lineno in ((f[0], f[2]) for f in frames):
         f_locals = getattr(frame, 'f_locals', {})
